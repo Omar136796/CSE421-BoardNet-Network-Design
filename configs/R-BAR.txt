@@ -1,0 +1,61 @@
+! R-BAR configuration - BoardNet (CSE421 project)
+! Commands from the project report, entered in Cisco Packet Tracer (Cisco 2911 routers)
+
+! ===== Base configuration =====
+enable
+configure terminal
+hostname R-BAR
+no ip domain-lookup
+enable secret class
+banner motd &
+======================
+BoardNet - Authorized Access Only
+======================
+&
+line console 0
+ password cisco
+ login
+ exit
+line vty 0 4
+ password cisco
+ login
+ exit
+end
+copy running-config startup-config
+
+! ===== Interfaces =====
+configure terminal
+interface GigabitEthernet0/0
+ ip address 12.55.5.1 255.255.255.128
+ no shutdown
+ exit
+interface Serial0/0/0
+ ip address 12.55.6.18 255.255.255.252
+ no shutdown
+ exit
+interface Serial0/0/1
+ ip address 12.55.6.21 255.255.255.252
+ no shutdown
+ exit
+
+! ===== Primary recursive static routes via DHK (AD 1) =====
+ip route 12.55.0.0 255.255.254.0 12.55.6.22
+ip route 12.55.2.0 255.255.255.0 12.55.6.22
+ip route 12.55.3.0 255.255.255.0 12.55.6.22
+ip route 12.55.4.0 255.255.255.0 12.55.6.22
+ip route 12.55.6.0 255.255.255.248 12.55.6.22
+ip route 12.55.6.8 255.255.255.252 12.55.6.22
+ip route 12.55.6.12 255.255.255.252 12.55.6.22
+ip route 12.55.5.128 255.255.255.128 12.55.6.17
+
+! ===== Floating backup routes via KHU (AD 5) =====
+ip route 12.55.0.0 255.255.254.0 12.55.6.17 5
+ip route 12.55.2.0 255.255.255.0 12.55.6.17 5
+ip route 12.55.3.0 255.255.255.0 12.55.6.17 5
+ip route 12.55.4.0 255.255.255.0 12.55.6.17 5
+ip route 12.55.6.0 255.255.255.248 12.55.6.17 5
+ip route 12.55.6.8 255.255.255.252 12.55.6.17 5
+ip route 12.55.6.12 255.255.255.252 12.55.6.17 5
+ip route 12.55.5.128 255.255.255.128 12.55.6.22 5
+end
+copy running-config startup-config

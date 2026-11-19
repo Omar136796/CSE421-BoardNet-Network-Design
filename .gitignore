@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Packet Tracer backups
+*.pkt.bak

@@ -1,0 +1,100 @@
+! R-DHK configuration - BoardNet (CSE421 project)
+! Commands from the project report, entered in Cisco Packet Tracer (Cisco 2911 routers)
+
+! ===== Base configuration =====
+enable
+configure terminal
+hostname R-DHK
+no ip domain-lookup
+enable secret class
+banner motd &
+======================
+BoardNet - Authorized Access Only
+======================
+&
+line console 0
+ password cisco
+ login
+ exit
+line vty 0 4
+ password cisco
+ login
+ exit
+end
+copy running-config startup-config
+
+! ===== Interfaces =====
+configure terminal
+interface GigabitEthernet0/0
+ ip address 12.55.0.1 255.255.254.0
+ no shutdown
+ exit
+interface GigabitEthernet0/1
+ ip address 12.55.6.1 255.255.255.248
+ no shutdown
+ exit
+interface Serial0/0/0
+ ip address 12.55.6.9 255.255.255.252
+ clock rate 64000
+ no shutdown
+ exit
+interface Serial0/0/1
+ ip address 12.55.6.13 255.255.255.252
+ clock rate 64000
+ no shutdown
+ exit
+interface Serial0/1/0
+ ip address 12.55.6.22 255.255.255.252
+ clock rate 64000
+ no shutdown
+ exit
+
+! ===== DHCP server for DHK, CTG, RAJ and SYL =====
+ip dhcp excluded-address 12.55.0.1 12.55.0.10
+ip dhcp excluded-address 12.55.2.1 12.55.2.10
+ip dhcp excluded-address 12.55.3.1 12.55.3.10
+ip dhcp excluded-address 12.55.4.1 12.55.4.10
+ip dhcp pool DHK_LAN
+ network 12.55.0.0 255.255.254.0
+ default-router 12.55.0.1
+ dns-server 12.55.0.2
+ exit
+ip dhcp pool CTG_LAN
+ network 12.55.2.0 255.255.255.0
+ default-router 12.55.2.1
+ dns-server 12.55.0.2
+ exit
+ip dhcp pool RAJ_LAN
+ network 12.55.3.0 255.255.255.0
+ default-router 12.55.3.1
+ dns-server 12.55.0.2
+ exit
+ip dhcp pool SYL_LAN
+ network 12.55.4.0 255.255.255.0
+ default-router 12.55.4.1
+ dns-server 12.55.0.2
+ exit
+
+! ===== RIPv2 with SYL and RAJ =====
+router rip
+ version 2
+ no auto-summary
+ network 12.0.0.0
+ passive-interface GigabitEthernet0/0
+ passive-interface Serial0/0/0
+ passive-interface Serial0/0/1
+ passive-interface Serial0/1/0
+ default-information originate
+ exit
+
+! ===== Static routes to the non-RIP boards =====
+ip route 12.55.2.0 255.255.255.0 12.55.6.10
+ip route 12.55.5.0 255.255.255.128 12.55.6.21
+ip route 12.55.5.128 255.255.255.128 12.55.6.14
+ip route 12.55.6.16 255.255.255.252 12.55.6.14
+
+! ===== Floating backup routes (AD 5) =====
+ip route 12.55.5.0 255.255.255.128 12.55.6.14 5
+ip route 12.55.5.128 255.255.255.128 12.55.6.21 5
+end
+copy running-config startup-config

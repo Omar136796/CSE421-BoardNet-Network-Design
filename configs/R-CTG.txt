@@ -1,0 +1,41 @@
+! R-CTG configuration - BoardNet (CSE421 project)
+! Commands from the project report, entered in Cisco Packet Tracer (Cisco 2911 routers)
+
+! ===== Base configuration =====
+enable
+configure terminal
+hostname R-CTG
+no ip domain-lookup
+enable secret class
+banner motd &
+======================
+BoardNet - Authorized Access Only
+======================
+&
+line console 0
+ password cisco
+ login
+ exit
+line vty 0 4
+ password cisco
+ login
+ exit
+end
+copy running-config startup-config
+
+! ===== Interfaces =====
+configure terminal
+interface GigabitEthernet0/0
+ ip address 12.55.2.1 255.255.255.0
+ ip helper-address 12.55.6.9
+ no shutdown
+ exit
+interface Serial0/0/0
+ ip address 12.55.6.10 255.255.255.252
+ no shutdown
+ exit
+
+! ===== Default route: CTG reaches everything through DHK =====
+ip route 0.0.0.0 0.0.0.0 12.55.6.9
+end
+copy running-config startup-config

@@ -1,0 +1,45 @@
+! R-RAJ configuration - BoardNet (CSE421 project)
+! Commands from the project report, entered in Cisco Packet Tracer (Cisco 2911 routers)
+
+! ===== Base configuration =====
+enable
+configure terminal
+hostname R-RAJ
+no ip domain-lookup
+enable secret class
+banner motd &
+======================
+BoardNet - Authorized Access Only
+======================
+&
+line console 0
+ password cisco
+ login
+ exit
+line vty 0 4
+ password cisco
+ login
+ exit
+end
+copy running-config startup-config
+
+! ===== Interfaces =====
+configure terminal
+interface GigabitEthernet0/0
+ ip address 12.55.3.1 255.255.255.0
+ ip helper-address 12.55.6.1
+ no shutdown
+ exit
+interface GigabitEthernet0/1
+ ip address 12.55.6.3 255.255.255.248
+ no shutdown
+ exit
+
+! ===== RIPv2 with DHK and SYL =====
+router rip
+ version 2
+ no auto-summary
+ network 12.0.0.0
+ passive-interface GigabitEthernet0/0
+end
+copy running-config startup-config
