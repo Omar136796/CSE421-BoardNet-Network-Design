@@ -7,6 +7,13 @@ A multi-site enterprise network for six HSC education boards of Bangladesh, buil
 
 ![Network topology](images/topology.png)
 
+<details>
+<summary>Labelled topology (interfaces and network addresses)</summary>
+
+![Labelled topology](images/topology_labeled.png)
+
+</details>
+
 ## Scenario
 
 The Ministry of Education wants a unified network named BoardNet for HSC exam coordination. Six boards are connected, and each has its own LAN sized for the hosts it needs:
