@@ -17,7 +17,7 @@ A multi-site enterprise network for six HSC education boards of Bangladesh, buil
 
 ## Scenario
 
-The Ministry of Education wants a unified network named BoardNet for HSC exam coordination. Six boards are connected, and each has its own LAN sized for the hosts it needs:
+The Ministry of Education wants a unified network named BoardNet for HSC exam coordination. Six boards are connected and each has its own LAN sized for the hosts it needs:
 
 | Board | Abbreviation | Required hosts |
 |---|---|---|
